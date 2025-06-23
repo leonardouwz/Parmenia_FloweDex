@@ -42,6 +42,7 @@ class _AddPlantScreenState extends State<AddPlantScreen> {
           .collection('plants')
           .add(plant.toMap());
 
+      if (!mounted) return;
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Planta agregada exitosamente')),
@@ -51,9 +52,11 @@ class _AddPlantScreenState extends State<AddPlantScreen> {
         SnackBar(content: Text('Error al agregar la planta: $e')),
       );
     } finally {
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
