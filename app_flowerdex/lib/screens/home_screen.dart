@@ -14,7 +14,7 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Mis Plantas'),
+        title: Text('FlowerDex'),
         backgroundColor: Colors.green,
         foregroundColor: Colors.white,
         actions: [

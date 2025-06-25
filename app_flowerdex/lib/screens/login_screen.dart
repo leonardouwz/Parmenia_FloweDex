@@ -112,7 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           SizedBox(height: 16),
                           Text(
-                            'Mis Plantas',
+                            'FlowerDex',
                             style: TextStyle(
                               fontSize: isDesktop ? 32 : 28,
                               fontWeight: FontWeight.bold,
