@@ -68,63 +68,20 @@ class HomeScreen extends StatelessWidget {
             );
           }
 
-          return ListView.builder(
+          return Padding(
             padding: EdgeInsets.all(16),
-            itemCount: plants.length,
-            itemBuilder: (context, index) {
-              final plant = plants[index];
-              return Card(
-                margin: EdgeInsets.only(bottom: 12),
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: ListTile(
-                  contentPadding: EdgeInsets.all(16),
-                  leading: CircleAvatar(
-                    radius: 30,
-                    backgroundColor: Colors.green.shade100,
-                    backgroundImage: plant.imageUrl.isNotEmpty
-                        ? NetworkImage(plant.imageUrl)
-                        : null,
-                    child: plant.imageUrl.isEmpty
-                        ? Icon(Icons.local_florist, color: Colors.green)
-                        : null,
-                  ),
-                  title: Text(
-                    plant.name,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(plant.species),
-                      SizedBox(height: 4),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.water_drop,
-                            size: 16,
-                            color: plant.needsWatering ? Colors.red : Colors.blue,
-                          ),
-                          SizedBox(width: 4),
-                          Text(
-                            plant.needsWatering ? 'Necesita agua' : 'Está bien',
-                            style: TextStyle(
-                              color: plant.needsWatering ? Colors.red : Colors.green,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  trailing: plant.needsWatering
-                      ? Icon(Icons.warning, color: Colors.orange)
-                      : Icon(Icons.check_circle, color: Colors.green),
+            child: GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                childAspectRatio: 0.8, // Relación ancho/alto para cards más altas
+              ),
+              itemCount: plants.length,
+              itemBuilder: (context, index) {
+                final plant = plants[index];
+
+                return GestureDetector(
                   onTap: () {
                     Navigator.push(
                       context,
@@ -133,9 +90,143 @@ class HomeScreen extends StatelessWidget {
                       ),
                     );
                   },
-                ),
-              );
-            },
+                  child: Card(
+                    elevation: 6,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Imagen de la planta
+                        Expanded(
+                          flex: 3,
+                          child: Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(16),
+                              ),
+                              color: Colors.green.shade50,
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(16),
+                              ),
+                              child: plant.imageUrl.isNotEmpty
+                                  ? Image.network(
+                                plant.imageUrl,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Container(
+                                    color: Colors.green.shade100,
+                                    child: Icon(
+                                      Icons.local_florist,
+                                      size: 50,
+                                      color: Colors.green,
+                                    ),
+                                  );
+                                },
+                              )
+                                  : Container(
+                                color: Colors.green.shade100,
+                                child: Icon(
+                                  Icons.local_florist,
+                                  size: 50,
+                                  color: Colors.green,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        // Información de la planta
+                        Expanded(
+                          flex: 2,
+                          child: Padding(
+                            padding: EdgeInsets.all(12),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      plant.name,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    SizedBox(height: 4),
+                                    Text(
+                                      plant.species,
+                                      style: TextStyle(
+                                        color: Colors.grey.shade600,
+                                        fontSize: 12,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
+                                ),
+                                // Estado del riego
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 4,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: plant.needsWatering
+                                        ? Colors.red.shade50
+                                        : Colors.green.shade50,
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(
+                                      color: plant.needsWatering
+                                          ? Colors.red.shade200
+                                          : Colors.green.shade200,
+                                    ),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        Icons.water_drop,
+                                        size: 14,
+                                        color: plant.needsWatering
+                                            ? Colors.red
+                                            : Colors.green,
+                                      ),
+                                      SizedBox(width: 4),
+                                      Flexible(
+                                        child: Text(
+                                          plant.needsWatering ? 'Necesita agua' : 'Está bien',
+                                          style: TextStyle(
+                                            color: plant.needsWatering
+                                                ? Colors.red.shade700
+                                                : Colors.green.shade700,
+                                            fontSize: 11,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
           );
         },
       ),
