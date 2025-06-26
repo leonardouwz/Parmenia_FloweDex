@@ -126,6 +126,8 @@ class _AddPlantScreenState extends State<AddPlantScreen> {
                         min: 1,
                         max: 30,
                         divisions: 29,
+                        activeColor: Colors.green,
+                        inactiveColor: Colors.grey,
                         label: '$_wateringFrequency días',
                         onChanged: (value) {
                           setState(() {
